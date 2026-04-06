@@ -1,4 +1,4 @@
-const CACHE_NAME = 'c25k-v1';
+const CACHE_NAME = 'c25k-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -23,6 +23,6 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request).catch(() => caches.match(e.request))
   );
 });
