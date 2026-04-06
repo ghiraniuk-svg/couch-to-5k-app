@@ -628,10 +628,28 @@ function startWorkout(){
   intervalIdx=0; isPlaying=false; clearInterval(timerInterval);
       showView('view-workout');
   renderWorkoutInterval();
+        // Button click handlers (set once here, not in renderWorkoutInterval)
+  document.getElementById('btn-play').onclick = ()=>{
+    isPlaying = !isPlaying;
+    if(isPlaying) startTicking(); else stopTicking();
+    updatePlayIcon();
+  };
+  
+  document.getElementById('btn-skip').onclick = ()=>{
+    const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
+    if(intervalIdx < ivs.length-1){ stopTicking(); intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
+    else { isPlaying=false; stopTicking(); showComplete(); }
+  };
+  
+  document.getElementById('btn-prev').onclick = ()=>{
+    if(intervalIdx > 0){ stopTicking(); intervalIdx--; renderWorkoutInterval(); if(isPlaying) startTicking(); }
+  };
+  
 
 }
 
 function renderWorkoutInterval(){
+
   const run = WEEKS[workoutWeekIdx].runs[workoutRunIdx];
   const ivs = run.intervals;
   const iv = ivs[intervalIdx];
@@ -705,22 +723,6 @@ function updatePlayIcon(){
   document.getElementById('btn-play').setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
 }
 
-document.getElementById('btn-play').onclick = ()=>{
-  isPlaying = !isPlaying;
-  if(isPlaying) startTicking(); else stopTicking();
-  updatePlayIcon();
-};
-
-
-document.getElementById('btn-skip').onclick = ()=>{
-  const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
-  if(intervalIdx < ivs.length-1){ stopTicking(); intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
-  else { isPlaying=false; stopTicking(); showComplete(); }
-};
-
-document.getElementById('btn-prev').onclick = ()=>{
-  if(intervalIdx > 0){ stopTicking(); intervalIdx--; renderWorkoutInterval(); if(isPlaying) startTicking(); }
-};
 
 // === COMPLETE ===
 function showComplete(){
