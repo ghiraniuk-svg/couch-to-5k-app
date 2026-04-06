@@ -709,17 +709,18 @@ document.getElementById('btn-play').onclick = ()=>{
   isPlaying = !isPlaying;
   if(isPlaying) startTicking(); else stopTicking();
   updatePlayIcon();
-});
+};
+
 
 document.getElementById('btn-skip').onclick = ()=>{
   const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
   if(intervalIdx < ivs.length-1){ stopTicking(); intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
   else { isPlaying=false; stopTicking(); showComplete(); }
-});
+};
 
 document.getElementById('btn-prev').onclick = ()=>{
   if(intervalIdx > 0){ stopTicking(); intervalIdx--; renderWorkoutInterval(); if(isPlaying) startTicking(); }
-});
+};
 
 // === COMPLETE ===
 function showComplete(){
