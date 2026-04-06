@@ -626,7 +626,7 @@ function startWorkout(){
   const wk=WEEKS[workoutWeekIdx], run=wk.runs[workoutRunIdx];
   document.getElementById('workout-title').textContent = `${wk.label} · ${run.title}`;
   document.getElementById('workout-sub').textContent = `~${Math.round(getTotalDuration(run.intervals)/60)} min total`;
-  document.getElementById('back-to-week').querySelector('svg').parentNode.lastChild.nodeValue='';
+  
   intervalIdx=0; isPlaying=false; clearInterval(timerInterval);
   renderWorkoutInterval();
   showView('view-workout');
