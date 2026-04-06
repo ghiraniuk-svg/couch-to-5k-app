@@ -7,3 +7,763 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* === DESIGN TOKENS === */
+:root, [data-theme="light"] {
+  --color-bg: #f5f4f0;
+  --color-surface: #f8f7f4;
+  --color-surface-2: #fafaf8;
+  --color-surface-offset: #eeece8;
+  --color-surface-dynamic: #e4e2dc;
+  --color-divider: #dbd8d2;
+  --color-border: #d1cec6;
+  --color-text: #1e1c16;
+  --color-text-muted: #6e6d68;
+  --color-text-faint: #b0afa9;
+  --color-text-inverse: #f8f7f3;
+  --color-primary: #1a7c5e;
+  --color-primary-hover: #125e47;
+  --color-primary-active: #0c4232;
+  --color-primary-highlight: #c8ddd7;
+  --color-walk: #2563a8;
+  --color-walk-bg: #dce9f8;
+  --color-run: #b84c1a;
+  --color-run-bg: #fae0d0;
+  --color-success: #2d7a1f;
+  --color-success-bg: #d4eacc;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px oklch(0.15 0.01 100 / 0.06);
+  --shadow-md: 0 4px 12px oklch(0.15 0.01 100 / 0.09);
+  --shadow-lg: 0 12px 32px oklch(0.15 0.01 100 / 0.13);
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem;
+}
+[data-theme="dark"] {
+  --color-bg: #141412;
+  --color-surface: #1a1918;
+  --color-surface-2: #1e1d1b;
+  --color-surface-offset: #1c1b19;
+  --color-surface-dynamic: #2a2927;
+  --color-divider: #252422;
+  --color-border: #333230;
+  --color-text: #c9c8c4;
+  --color-text-muted: #747370;
+  --color-text-faint: #555450;
+  --color-text-inverse: #1e1d1b;
+  --color-primary: #3aab83;
+  --color-primary-hover: #1f9168;
+  --color-primary-active: #127554;
+  --color-primary-highlight: #1f3530;
+  --color-walk: #6ba0d8;
+  --color-walk-bg: #1c2e42;
+  --color-run: #d87a4a;
+  --color-run-bg: #3a2018;
+  --color-success: #5aac3e;
+  --color-success-bg: #1e3018;
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.25);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.35);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.45);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) {
+  --color-bg: #141412; --color-surface: #1a1918; --color-surface-2: #1e1d1b;
+  --color-surface-offset: #1c1b19; --color-surface-dynamic: #2a2927;
+  --color-divider: #252422; --color-border: #333230;
+  --color-text: #c9c8c4; --color-text-muted: #747370; --color-text-faint: #555450;
+  --color-text-inverse: #1e1d1b; --color-primary: #3aab83;
+  --color-primary-hover: #1f9168; --color-primary-active: #127554;
+  --color-primary-highlight: #1f3530;
+  --color-walk: #6ba0d8; --color-walk-bg: #1c2e42;
+  --color-run: #d87a4a; --color-run-bg: #3a2018;
+  --color-success: #5aac3e; --color-success-bg: #1e3018;
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.25);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.35);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.45);
+}}
+
+/* === RESET === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background: var(--color-bg); transition: background var(--transition), color var(--transition); }
+img, svg { display: block; max-width: 100%; }
+button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+ul { list-style: none; }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* === LAYOUT === */
+.app { display: flex; flex-direction: column; min-height: 100dvh; max-width: 480px; margin: 0 auto; }
+.header { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: var(--space-4); background: var(--color-surface); border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.08); backdrop-filter: blur(8px); }
+.logo { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-primary); }
+.logo svg { flex-shrink: 0; }
+.header-actions { display: flex; align-items: center; gap: var(--space-2); }
+.icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-full); color: var(--color-text-muted); transition: color var(--transition), background var(--transition); }
+.icon-btn:hover { color: var(--color-text); background: var(--color-surface-offset); }
+
+/* === VIEWS === */
+.view { display: none; flex-direction: column; flex: 1; animation: fadeIn 0.25s cubic-bezier(0.16,1,0.3,1); }
+.view.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* === HOME VIEW === */
+.home-hero { padding: var(--space-8) var(--space-6) var(--space-6); }
+.home-hero h1 { font-family: var(--font-display); font-size: var(--text-2xl); line-height: 1.1; color: var(--color-text); margin-bottom: var(--space-2); }
+.home-hero p { font-size: var(--text-base); color: var(--color-text-muted); max-width: 38ch; }
+.progress-strip { margin: 0 var(--space-4) var(--space-6); background: var(--color-surface); border-radius: var(--radius-xl); padding: var(--space-4) var(--space-5); border: 1px solid oklch(from var(--color-text) l c h / 0.07); box-shadow: var(--shadow-sm); }
+.progress-strip-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); }
+.progress-label { font-size: var(--text-xs); font-weight: 600; color: var(--color-text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.progress-count { font-size: var(--text-xs); color: var(--color-text-faint); }
+.progress-bar-track { height: 6px; background: var(--color-surface-offset); border-radius: var(--radius-full); overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--color-primary); border-radius: var(--radius-full); transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+.next-run-card { margin: 0 var(--space-4) var(--space-4); background: var(--color-primary); border-radius: var(--radius-2xl); padding: var(--space-6); color: var(--color-text-inverse); box-shadow: var(--shadow-md); cursor: pointer; transition: transform var(--transition), box-shadow var(--transition); }
+.next-run-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.next-run-card:active { transform: translateY(0); box-shadow: var(--shadow-md); }
+.next-run-eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-bottom: var(--space-2); }
+.next-run-title { font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-1); }
+.next-run-desc { font-size: var(--text-sm); opacity: 0.8; margin-bottom: var(--space-5); }
+.next-run-cta { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); font-weight: 600; background: oklch(from white l c h / 0.18); border-radius: var(--radius-full); padding: var(--space-2) var(--space-5); width: fit-content; transition: background var(--transition); }
+.next-run-card:hover .next-run-cta { background: oklch(from white l c h / 0.28); }
+.week-grid-title { padding: 0 var(--space-4) var(--space-3); font-size: var(--text-sm); font-weight: 600; color: var(--color-text-muted); }
+.week-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); padding: 0 var(--space-4) var(--space-8); }
+.week-card { background: var(--color-surface); border-radius: var(--radius-xl); padding: var(--space-4); border: 1px solid oklch(from var(--color-text) l c h / 0.07); cursor: pointer; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); box-shadow: var(--shadow-sm); }
+.week-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--color-primary); }
+.week-card.current { border-color: var(--color-primary); background: color-mix(in oklch, var(--color-primary) 5%, var(--color-surface)); }
+.week-card.done { opacity: 0.6; }
+.week-card-num { font-size: var(--text-xs); font-weight: 700; color: var(--color-text-faint); margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.07em; }
+.week-card-label { font-size: var(--text-sm); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-3); }
+.run-dots { display: flex; gap: var(--space-1); }
+.run-dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--color-surface-dynamic); }
+.run-dot.done { background: var(--color-primary); }
+.run-dot.active { background: var(--color-run); }
+
+/* === WEEK DETAIL VIEW === */
+.week-detail-header { padding: var(--space-6) var(--space-4) var(--space-4); }
+.back-btn { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-primary); font-weight: 600; margin-bottom: var(--space-4); transition: opacity var(--transition); }
+.back-btn:hover { opacity: 0.75; }
+.week-detail-title { font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-1); }
+.week-detail-sub { font-size: var(--text-sm); color: var(--color-text-muted); }
+.run-list { padding: 0 var(--space-4) var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); }
+.run-item { background: var(--color-surface); border-radius: var(--radius-xl); padding: var(--space-4) var(--space-5); border: 1px solid oklch(from var(--color-text) l c h / 0.07); display: flex; align-items: center; gap: var(--space-4); box-shadow: var(--shadow-sm); cursor: pointer; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.run-item:hover:not(.locked) { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--color-primary); }
+.run-item.locked { cursor: default; opacity: 0.45; }
+.run-item.done { background: color-mix(in oklch, var(--color-success) 5%, var(--color-surface)); border-color: color-mix(in oklch, var(--color-success) 25%, var(--color-border)); }
+.run-item.next { border-color: var(--color-primary); background: color-mix(in oklch, var(--color-primary) 4%, var(--color-surface)); }
+.run-status-icon { width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
+.run-status-icon.done { background: var(--color-success-bg); color: var(--color-success); }
+.run-status-icon.next { background: var(--color-primary-highlight); color: var(--color-primary); }
+.run-status-icon.locked { background: var(--color-surface-offset); color: var(--color-text-faint); }
+.run-item-info { flex: 1; }
+.run-item-title { font-weight: 600; font-size: var(--text-sm); color: var(--color-text); }
+.run-item-desc { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px; }
+.run-item-arrow { color: var(--color-text-faint); }
+
+/* === WORKOUT VIEW === */
+.workout-view { background: var(--color-bg); }
+.workout-header { padding: var(--space-4); display: flex; align-items: center; gap: var(--space-3); border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.07); }
+.workout-title-block { flex: 1; }
+.workout-title { font-weight: 700; font-size: var(--text-base); }
+.workout-sub { font-size: var(--text-xs); color: var(--color-text-muted); }
+.workout-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: var(--space-8) var(--space-6); gap: var(--space-8); }
+.interval-badge { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-5); border-radius: var(--radius-full); font-weight: 700; font-size: var(--text-sm); letter-spacing: 0.05em; text-transform: uppercase; transition: background var(--transition), color var(--transition); }
+.interval-badge.run { background: var(--color-run-bg); color: var(--color-run); }
+.interval-badge.walk { background: var(--color-walk-bg); color: var(--color-walk); }
+.interval-badge.warmup { background: var(--color-surface-offset); color: var(--color-text-muted); }
+.interval-badge.cooldown { background: var(--color-surface-offset); color: var(--color-text-muted); }
+.timer-ring-wrap { position: relative; width: 220px; height: 220px; }
+.timer-ring-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.timer-ring-bg { fill: none; stroke: var(--color-surface-offset); stroke-width: 8; }
+.timer-ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.4s var(--transition); }
+.timer-ring-fill.run { stroke: var(--color-run); }
+.timer-ring-fill.walk { stroke: var(--color-walk); }
+.timer-ring-fill.warmup { stroke: var(--color-text-faint); }
+.timer-ring-fill.cooldown { stroke: var(--color-text-faint); }
+.timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.timer-time { font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 4rem); line-height: 1; color: var(--color-text); font-variant-numeric: tabular-nums; }
+.timer-label { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-1); text-transform: uppercase; letter-spacing: 0.08em; }
+.next-up { font-size: var(--text-xs); color: var(--color-text-muted); text-align: center; }
+.next-up strong { color: var(--color-text); }
+.interval-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1); max-width: 300px; }
+.i-dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--color-surface-dynamic); flex-shrink: 0; transition: background 0.3s; }
+.i-dot.done { background: var(--color-primary); }
+.i-dot.active-run { background: var(--color-run); }
+.i-dot.active-walk { background: var(--color-walk); }
+.controls { display: flex; align-items: center; gap: var(--space-6); }
+.ctrl-btn { width: 52px; height: 52px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid oklch(from var(--color-text) l c h / 0.1); color: var(--color-text-muted); box-shadow: var(--shadow-sm); transition: color var(--transition), background var(--transition), box-shadow var(--transition); }
+.ctrl-btn:hover { color: var(--color-text); box-shadow: var(--shadow-md); background: var(--color-surface-offset); }
+.ctrl-btn.primary { width: 68px; height: 68px; background: var(--color-primary); color: var(--color-text-inverse); border-color: transparent; box-shadow: var(--shadow-md); }
+.ctrl-btn.primary:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-lg); }
+
+/* === COMPLETE OVERLAY === */
+.complete-overlay { position: fixed; inset: 0; z-index: 200; background: oklch(from var(--color-bg) l c h / 0.92); backdrop-filter: blur(8px); display: none; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-8); animation: fadeIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+.complete-overlay.show { display: flex; }
+.complete-emoji { font-size: 4rem; margin-bottom: var(--space-4); }
+.complete-title { font-family: var(--font-display); font-size: var(--text-xl); text-align: center; margin-bottom: var(--space-2); }
+.complete-sub { font-size: var(--text-base); color: var(--color-text-muted); text-align: center; max-width: 32ch; margin-bottom: var(--space-8); }
+.complete-actions { display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 280px; }
+.btn-primary { background: var(--color-primary); color: var(--color-text-inverse); border-radius: var(--radius-full); padding: var(--space-3) var(--space-8); font-weight: 600; font-size: var(--text-sm); text-align: center; transition: background var(--transition), transform var(--transition); }
+.btn-primary:hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--color-text-muted); border-radius: var(--radius-full); padding: var(--space-3) var(--space-8); font-weight: 600; font-size: var(--text-sm); text-align: center; border: 1px solid oklch(from var(--color-text) l c h / 0.12); transition: color var(--transition), border-color var(--transition); }
+.btn-ghost:hover { color: var(--color-text); border-color: oklch(from var(--color-text) l c h / 0.25); }
+
+/* === CONFETTI === */
+.confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 300; overflow: hidden; }
+.confetti-piece { position: absolute; width: 8px; height: 8px; opacity: 0; animation: confettiFall linear forwards; }
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="sr-only">Skip to content</a>
+<div class="app">
+  <header class="header" role="banner">
+    <div class="logo" aria-label="Couch to 5K">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 19 L12 10 L16 16 L19 12 L22 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="8" cy="19" r="1.5" fill="currentColor"/>
+        <circle cx="22" cy="15" r="1.5" fill="currentColor"/>
+      </svg>
+      C25K
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- HOME VIEW -->
+    <div class="view active" id="view-home" role="main">
+      <div class="home-hero">
+        <h1>Your 5K starts here.</h1>
+        <p>9 weeks from the couch to running 5 kilometres. Three runs a week.</p>
+      </div>
+      <div class="progress-strip">
+        <div class="progress-strip-top">
+          <span class="progress-label">Overall Progress</span>
+          <span class="progress-count" id="progress-count">0 / 27 runs</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="next-run-card" id="next-run-card" role="button" tabindex="0" aria-label="Start next run">
+        <div class="next-run-eyebrow" id="next-run-eyebrow">Up next</div>
+        <div class="next-run-title" id="next-run-title">Week 1 · Run 1</div>
+        <div class="next-run-desc" id="next-run-desc">Alternate 60s running and 90s walking</div>
+        <div class="next-run-cta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Start Run
+        </div>
+      </div>
+      <div class="week-grid-title">All Weeks</div>
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+
+    <!-- WEEK DETAIL VIEW -->
+    <div class="view" id="view-week" role="main">
+      <div class="week-detail-header">
+        <button class="back-btn" id="back-to-home" aria-label="Back to home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          All Weeks
+        </button>
+        <h2 class="week-detail-title" id="week-detail-title">Week 1</h2>
+        <p class="week-detail-sub" id="week-detail-sub">Build your base</p>
+      </div>
+      <div class="run-list" id="run-list"></div>
+    </div>
+
+    <!-- WORKOUT VIEW -->
+    <div class="view" id="view-workout" role="main">
+      <div class="workout-header">
+        <button class="back-btn" id="back-to-week" aria-label="Back to week" style="margin-bottom:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="workout-title-block">
+          <div class="workout-title" id="workout-title">Week 1 · Run 1</div>
+          <div class="workout-sub" id="workout-sub">20 min total</div>
+        </div>
+      </div>
+      <div class="workout-body">
+        <div class="interval-badge run" id="interval-badge" aria-live="polite">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="badge-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span id="badge-label">Run</span>
+        </div>
+        <div class="timer-ring-wrap" aria-label="Timer" role="timer">
+          <svg viewBox="0 0 220 220" width="220" height="220">
+            <circle class="timer-ring-bg" cx="110" cy="110" r="97"/>
+            <circle class="timer-ring-fill run" id="timer-ring" cx="110" cy="110" r="97"
+              stroke-dasharray="609.7" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-center">
+            <div class="timer-time" id="timer-display">1:00</div>
+            <div class="timer-label" id="timer-interval-label">interval 1 of 17</div>
+          </div>
+        </div>
+        <div class="next-up" id="next-up-label">Next: <strong>90s Walk</strong></div>
+        <div class="interval-dots" id="interval-dots" aria-label="Interval progress"></div>
+        <div class="controls">
+          <button class="ctrl-btn" id="btn-prev" aria-label="Previous interval">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20L9 12l10-8v16z"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+          </button>
+          <button class="ctrl-btn primary" id="btn-play" aria-label="Play">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <button class="ctrl-btn" id="btn-skip" aria-label="Skip interval">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4l10 8-10 8V4z"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- COMPLETE OVERLAY -->
+<div class="complete-overlay" id="complete-overlay" role="dialog" aria-modal="true" aria-labelledby="complete-title">
+  <div class="confetti-container" id="confetti"></div>
+  <div class="complete-emoji" aria-hidden="true">🎉</div>
+  <h2 class="complete-title" id="complete-title">Run complete!</h2>
+  <p class="complete-sub" id="complete-sub">Week 1, Run 1 done. You're on your way!</p>
+  <div class="complete-actions">
+    <button class="btn-primary" id="btn-complete-home">Back to home</button>
+    <button class="btn-ghost" id="btn-redo">Redo this run</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// === DARK MODE TOGGLE ===
+const themeToggle = document.querySelector('[data-theme-toggle]');
+const root = document.documentElement;
+let currentTheme = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+root.setAttribute('data-theme', currentTheme);
+function updateToggleIcon(theme) {
+  themeToggle.innerHTML = theme === 'dark'
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+updateToggleIcon(currentTheme);
+themeToggle.addEventListener('click', () => {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', currentTheme);
+  updateToggleIcon(currentTheme);
+});
+
+// === C25K PLAN DATA ===
+const WEEKS = [
+  { label: 'Week 1', sub: 'Run/walk 20 min', runs: [
+    { title: 'Run 1', desc: '8 × 60s run / 90s walk', intervals: buildIntervals(60,90,8) },
+    { title: 'Run 2', desc: '8 × 60s run / 90s walk', intervals: buildIntervals(60,90,8) },
+    { title: 'Run 3', desc: '8 × 60s run / 90s walk', intervals: buildIntervals(60,90,8) },
+  ]},
+  { label: 'Week 2', sub: 'Longer running bursts', runs: [
+    { title: 'Run 1', desc: '6 × 90s run / 2 min walk', intervals: buildIntervals(90,120,6) },
+    { title: 'Run 2', desc: '6 × 90s run / 2 min walk', intervals: buildIntervals(90,120,6) },
+    { title: 'Run 3', desc: '6 × 90s run / 2 min walk', intervals: buildIntervals(90,120,6) },
+  ]},
+  { label: 'Week 3', sub: 'Bigger intervals', runs: [
+    { title: 'Run 1', desc: '2 × (90s run, 90s walk, 3 min run, 3 min walk)', intervals: buildW3() },
+    { title: 'Run 2', desc: '2 × (90s run, 90s walk, 3 min run, 3 min walk)', intervals: buildW3() },
+    { title: 'Run 3', desc: '2 × (90s run, 90s walk, 3 min run, 3 min walk)', intervals: buildW3() },
+  ]},
+  { label: 'Week 4', sub: 'Building endurance', runs: [
+    { title: 'Run 1', desc: '3 min run, 90s walk, 5 min run, 2.5 min walk × 2', intervals: buildW4() },
+    { title: 'Run 2', desc: '3 min run, 90s walk, 5 min run, 2.5 min walk × 2', intervals: buildW4() },
+    { title: 'Run 3', desc: '3 min run, 90s walk, 5 min run, 2.5 min walk × 2', intervals: buildW4() },
+  ]},
+  { label: 'Week 5', sub: 'Milestone week', runs: [
+    { title: 'Run 1', desc: '5 min run, 3 min walk × 3', intervals: buildW5R1() },
+    { title: 'Run 2', desc: '8 min run, 5 min walk, 8 min run', intervals: buildW5R2() },
+    { title: 'Run 3', desc: '20 min continuous run', intervals: buildW5R3() },
+  ]},
+  { label: 'Week 6', sub: 'More continuous running', runs: [
+    { title: 'Run 1', desc: '5 min run, 3 min walk, 8 min run, 3 min walk, 5 min run', intervals: buildW6R1() },
+    { title: 'Run 2', desc: '10 min run, 3 min walk, 10 min run', intervals: buildW6R2() },
+    { title: 'Run 3', desc: '22 min continuous run', intervals: buildW6R3() },
+  ]},
+  { label: 'Week 7', sub: 'Sustaining pace', runs: [
+    { title: 'Run 1', desc: '25 min continuous run', intervals: buildSteady(25*60) },
+    { title: 'Run 2', desc: '25 min continuous run', intervals: buildSteady(25*60) },
+    { title: 'Run 3', desc: '25 min continuous run', intervals: buildSteady(25*60) },
+  ]},
+  { label: 'Week 8', sub: 'Getting stronger', runs: [
+    { title: 'Run 1', desc: '28 min continuous run', intervals: buildSteady(28*60) },
+    { title: 'Run 2', desc: '28 min continuous run', intervals: buildSteady(28*60) },
+    { title: 'Run 3', desc: '28 min continuous run', intervals: buildSteady(28*60) },
+  ]},
+  { label: 'Week 9', sub: 'You\'ve got this!', runs: [
+    { title: 'Run 1', desc: '30 min continuous run', intervals: buildSteady(30*60) },
+    { title: 'Run 2', desc: '30 min continuous run', intervals: buildSteady(30*60) },
+    { title: 'Run 3', desc: '30 min continuous run — finish line!', intervals: buildSteady(30*60) },
+  ]},
+];
+
+function buildIntervals(runSec, walkSec, reps) {
+  const arr = [{ type:'warmup', duration:300, label:'Warm-up Walk' }];
+  for(let i=0;i<reps;i++){
+    arr.push({type:'run',duration:runSec,label:'Run'});
+    if(i<reps-1) arr.push({type:'walk',duration:walkSec,label:'Walk'});
+  }
+  arr.push({type:'cooldown',duration:300,label:'Cool-down Walk'});
+  return arr;
+}
+function buildW3(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:90,label:'Run'},{type:'walk',duration:90,label:'Walk'},
+    {type:'run',duration:180,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:90,label:'Run'},{type:'walk',duration:90,label:'Walk'},
+    {type:'run',duration:180,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW4(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:180,label:'Run'},{type:'walk',duration:90,label:'Walk'},
+    {type:'run',duration:300,label:'Run'},{type:'walk',duration:150,label:'Walk'},
+    {type:'run',duration:180,label:'Run'},{type:'walk',duration:90,label:'Walk'},
+    {type:'run',duration:300,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW5R1(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:300,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:300,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:300,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW5R2(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:480,label:'Run'},{type:'walk',duration:300,label:'Walk'},
+    {type:'run',duration:480,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW5R3(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:1200,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW6R1(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:300,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:480,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:300,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW6R2(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:600,label:'Run'},{type:'walk',duration:180,label:'Walk'},
+    {type:'run',duration:600,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildW6R3(){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:1320,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+function buildSteady(runSec){
+  return [
+    {type:'warmup',duration:300,label:'Warm-up Walk'},
+    {type:'run',duration:runSec,label:'Run'},
+    {type:'cooldown',duration:300,label:'Cool-down Walk'},
+  ];
+}
+
+// === STATE ===
+const TOTAL_RUNS = 27;
+let completedRuns = new Set();
+let currentWeekIdx = 0, currentRunIdx = 0;
+let workoutWeekIdx = 0, workoutRunIdx = 0;
+let intervalIdx = 0;
+let timeLeft = 0;
+let isPlaying = false;
+let timerInterval = null;
+
+// === HELPERS ===
+function fmtTime(s){
+  const m=Math.floor(s/60), sec=s%60;
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+function getRunKey(w,r){ return `${w}-${r}`; }
+function isRunDone(w,r){ return completedRuns.has(getRunKey(w,r)); }
+function isRunLocked(w,r){
+  if(w===0&&r===0) return false;
+  const prev = r>0 ? [w,r-1] : [w-1,2];
+  return !isRunDone(prev[0],prev[1]);
+}
+function getNextRun(){
+  for(let w=0;w<9;w++) for(let r=0;r<3;r++) if(!isRunDone(w,r)) return {w,r};
+  return null;
+}
+function getTotalDuration(intervals){ return intervals.reduce((s,i)=>s+i.duration,0); }
+
+// === VIEWS ===
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// === HOME ===
+function renderHome(){
+  showView('view-home');
+  const done = completedRuns.size;
+  document.getElementById('progress-count').textContent = `${done} / ${TOTAL_RUNS} runs`;
+  document.getElementById('progress-bar').style.width = `${(done/TOTAL_RUNS)*100}%`;
+
+  const next = getNextRun();
+  const card = document.getElementById('next-run-card');
+  if(next){
+    const w=WEEKS[next.w], run=w.runs[next.r];
+    document.getElementById('next-run-eyebrow').textContent = 'Up next';
+    document.getElementById('next-run-title').textContent = `${w.label} · ${run.title}`;
+    document.getElementById('next-run-desc').textContent = run.desc;
+    card.style.opacity='1'; card.style.pointerEvents='auto';
+    card.onclick=()=>{ workoutWeekIdx=next.w; workoutRunIdx=next.r; startWorkout(); };
+    card.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ workoutWeekIdx=next.w; workoutRunIdx=next.r; startWorkout(); }};
+  } else {
+    document.getElementById('next-run-eyebrow').textContent = 'Programme complete';
+    document.getElementById('next-run-title').textContent = 'You did it!';
+    document.getElementById('next-run-desc').textContent = 'All 27 runs complete. You can run 5K!';
+    card.style.opacity='0.7'; card.style.pointerEvents='none';
+  }
+
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML='';
+  WEEKS.forEach((wk,wi)=>{
+    const allDone = [0,1,2].every(ri=>isRunDone(wi,ri));
+    const anyDone = [0,1,2].some(ri=>isRunDone(wi,ri));
+    const isCurrent = !allDone && (wi===0 || [0,1,2].every(ri=>isRunDone(wi-1,ri)));
+    const card = document.createElement('div');
+    card.className = `week-card${allDone?' done':''}${isCurrent?' current':''}`;
+    card.setAttribute('role','button'); card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label',`${wk.label} — ${allDone?'complete':isCurrent?'in progress':'locked'}`);
+    const dots = [0,1,2].map(ri=>{
+      const d=isRunDone(wi,ri);
+      const a=!d&&!isRunLocked(wi,ri)&&(next&&next.w===wi&&next.r===ri);
+      return `<div class="run-dot${d?' done':''}${a?' active':''}"></div>`;
+    }).join('');
+    card.innerHTML=`<div class="week-card-num">${wk.label}</div><div class="week-card-label">${wk.sub}</div><div class="run-dots">${dots}</div>`;
+    card.addEventListener('click',()=>{ currentWeekIdx=wi; renderWeekDetail(wi); });
+    card.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ currentWeekIdx=wi; renderWeekDetail(wi); }});
+    grid.appendChild(card);
+  });
+}
+
+// === WEEK DETAIL ===
+function renderWeekDetail(wi){
+  showView('view-week');
+  const wk = WEEKS[wi];
+  document.getElementById('week-detail-title').textContent = wk.label;
+  document.getElementById('week-detail-sub').textContent = wk.sub;
+  const list = document.getElementById('run-list');
+  list.innerHTML='';
+  wk.runs.forEach((run,ri)=>{
+    const done=isRunDone(wi,ri), locked=isRunLocked(wi,ri);
+    const isNext = !done&&!locked;
+    const item = document.createElement('div');
+    item.className = `run-item${done?' done':''}${locked?' locked':''}${isNext?' next':''}`;
+    const iconClass = done?'done':isNext?'next':'locked';
+    const icon = done?'✓':isNext?'▶':'🔒';
+    const totalMin = Math.round(getTotalDuration(run.intervals)/60);
+    item.innerHTML=`
+      <div class="run-status-icon ${iconClass}" aria-hidden="true">${icon}</div>
+      <div class="run-item-info">
+        <div class="run-item-title">${run.title}</div>
+        <div class="run-item-desc">${run.desc} · ~${totalMin} min</div>
+      </div>
+      ${!locked?'<svg class="run-item-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>':''}
+    `;
+    if(!locked){
+      item.setAttribute('role','button'); item.setAttribute('tabindex','0');
+      item.addEventListener('click',()=>{ workoutWeekIdx=wi; workoutRunIdx=ri; startWorkout(); });
+      item.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ workoutWeekIdx=wi; workoutRunIdx=ri; startWorkout(); }});
+    }
+    list.appendChild(item);
+  });
+}
+
+// === WORKOUT ===
+function startWorkout(){
+  const wk=WEEKS[workoutWeekIdx], run=wk.runs[workoutRunIdx];
+  document.getElementById('workout-title').textContent = `${wk.label} · ${run.title}`;
+  document.getElementById('workout-sub').textContent = `~${Math.round(getTotalDuration(run.intervals)/60)} min total`;
+  document.getElementById('back-to-week').querySelector('svg').parentNode.lastChild.nodeValue='';
+  intervalIdx=0; isPlaying=false; clearInterval(timerInterval);
+  renderWorkoutInterval();
+  showView('view-workout');
+}
+
+function renderWorkoutInterval(){
+  const run = WEEKS[workoutWeekIdx].runs[workoutRunIdx];
+  const ivs = run.intervals;
+  const iv = ivs[intervalIdx];
+  timeLeft = iv.duration;
+
+  const badge = document.getElementById('interval-badge');
+  const ring = document.getElementById('timer-ring');
+  badge.className = `interval-badge ${iv.type}`;
+  ring.className = `timer-ring-fill ${iv.type}`;
+
+  const badgeIcon = document.getElementById('badge-icon');
+  const badgeLabel = document.getElementById('badge-label');
+  badgeLabel.textContent = iv.label;
+  if(iv.type==='run'){ badgeIcon.innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>'; }
+  else if(iv.type==='walk'){ badgeIcon.innerHTML='<path d="M13 4h-2v8H7l5 5 5-5h-4V4z" fill="currentColor" stroke="none"/>'; }
+  else { badgeIcon.innerHTML='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'; }
+
+  const circumference = 2 * Math.PI * 97;
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = 0;
+  updateTimerDisplay(iv.duration, iv.duration);
+
+  document.getElementById('timer-interval-label').textContent = `interval ${intervalIdx+1} of ${ivs.length}`;
+
+  const next = ivs[intervalIdx+1];
+  const nextEl = document.getElementById('next-up-label');
+  if(next){ nextEl.innerHTML=`Next: <strong>${next.duration >= 60 ? Math.round(next.duration/60)+'min' : next.duration+'s'} ${next.label}</strong>`; }
+  else { nextEl.textContent='Last interval — finish strong!'; }
+
+  renderDots(ivs);
+  updatePlayIcon();
+}
+
+function updateTimerDisplay(current, total){
+  document.getElementById('timer-display').textContent = fmtTime(current);
+  const circumference = 2 * Math.PI * 97;
+  const offset = circumference * (1 - current / total);
+  document.getElementById('timer-ring').style.strokeDashoffset = offset;
+}
+
+function renderDots(ivs){
+  const container = document.getElementById('interval-dots');
+  container.innerHTML='';
+  ivs.forEach((iv,i)=>{
+    const d = document.createElement('div');
+    const isDone = i < intervalIdx;
+    const isActive = i === intervalIdx;
+    d.className = `i-dot${isDone?' done':''}${isActive&&iv.type==='run'?' active-run':''}${isActive&&iv.type==='walk'?' active-walk':''}${isActive&&(iv.type==='warmup'||iv.type==='cooldown')?' active-walk':''}`;
+    container.appendChild(d);
+  });
+}
+
+function tick(){
+  const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
+  const iv = ivs[intervalIdx];
+  timeLeft--;
+  updateTimerDisplay(timeLeft, iv.duration);
+  if(timeLeft<=0){
+    if(intervalIdx < ivs.length-1){ intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
+    else { isPlaying=false; clearInterval(timerInterval); showComplete(); }
+  }
+}
+
+function startTicking(){ clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
+function stopTicking(){ clearInterval(timerInterval); }
+
+function updatePlayIcon(){
+  document.getElementById('play-icon').innerHTML = isPlaying
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
+  document.getElementById('btn-play').setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+}
+
+document.getElementById('btn-play').addEventListener('click', ()=>{
+  isPlaying = !isPlaying;
+  if(isPlaying) startTicking(); else stopTicking();
+  updatePlayIcon();
+});
+
+document.getElementById('btn-skip').addEventListener('click', ()=>{
+  const ivs = WEEKS[workoutWeekIdx].runs[workoutRunIdx].intervals;
+  if(intervalIdx < ivs.length-1){ stopTicking(); intervalIdx++; renderWorkoutInterval(); if(isPlaying) startTicking(); }
+  else { isPlaying=false; stopTicking(); showComplete(); }
+});
+
+document.getElementById('btn-prev').addEventListener('click', ()=>{
+  if(intervalIdx > 0){ stopTicking(); intervalIdx--; renderWorkoutInterval(); if(isPlaying) startTicking(); }
+});
+
+// === COMPLETE ===
+function showComplete(){
+  const wk=WEEKS[workoutWeekIdx], run=wk.runs[workoutRunIdx];
+  completedRuns.add(getRunKey(workoutWeekIdx, workoutRunIdx));
+  document.getElementById('complete-title').textContent = 'Run complete!';
+  document.getElementById('complete-sub').textContent = `${wk.label}, ${run.title} done. Keep it up!`;
+  document.getElementById('complete-overlay').classList.add('show');
+  launchConfetti();
+}
+
+document.getElementById('btn-complete-home').addEventListener('click', ()=>{
+  document.getElementById('complete-overlay').classList.remove('show');
+  renderHome();
+});
+document.getElementById('btn-redo').addEventListener('click', ()=>{
+  document.getElementById('complete-overlay').classList.remove('show');
+  startWorkout();
+});
+
+// === BACK BUTTONS ===
+document.getElementById('back-to-home').addEventListener('click', renderHome);
+document.getElementById('back-to-week').addEventListener('click', ()=>{ stopTicking(); isPlaying=false; renderWeekDetail(workoutWeekIdx); });
+
+// === CONFETTI ===
+function launchConfetti(){
+  const el = document.getElementById('confetti');
+  el.innerHTML='';
+  const colors=['#1a7c5e','#b84c1a','#2563a8','#d19900','#a12c7b'];
+  for(let i=0;i<80;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'vw';
+    p.style.top='-10px';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(1.5+Math.random()*2)+'s';
+    p.style.animationDelay=(Math.random()*0.8)+'s';
+    p.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    p.style.width=(6+Math.random()*8)+'px';
+    p.style.height=(6+Math.random()*8)+'px';
+    p.style.transform='rotate('+Math.random()*360+'deg)';
+    el.appendChild(p);
+  }
+  setTimeout(()=>el.innerHTML='',4000);
+}
+
+// === INIT ===
+renderHome();
+})();
+</script>
+</body>
+</html>
